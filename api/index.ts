@@ -1,10 +1,11 @@
 import * as fs from "fs";
+import { APIGatewayProxyResult } from "aws-lambda";
 
-export const handler = async() => {
+export const handler = async(): Promise<APIGatewayProxyResult> => {
     const files = fs.readdirSync('./');
     console.log(files);
     return {
-        status: 200,
-        body: files
+        statusCode: 200,
+        body: JSON.stringify(files)
     };
 };
