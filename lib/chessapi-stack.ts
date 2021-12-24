@@ -1,4 +1,4 @@
-import { Stack, StackProps } from 'aws-cdk-lib';
+import { Duration, Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as apigateway from "aws-cdk-lib/aws-apigateway";
 import * as lambda from 'aws-cdk-lib/aws-lambda';
@@ -18,7 +18,12 @@ export class ChessapiStack extends Stack {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset(`${__dirname}/../api`),
-      layers: [ stockfishLayer ]
+      layers: [ stockfishLayer ],
+      environment: {
+        'STOCKFISH_BINARY': '/opt/stockfish'
+      },
+      memorySize: 1024,
+      timeout: Duration.seconds(10)
     });
 
     const api = new apigateway.RestApi(this, 'ChessAPI', {
